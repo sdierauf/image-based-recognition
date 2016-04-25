@@ -5,37 +5,32 @@ w = 0;
 b = 0;
 
 % ? for t = 1,2,...,T
-XtrainT = transpose(Xtrain);
-[N,d]=size(XtrainT);
-% lambda = 1; % who knows how big this is
-k = ceil(0.1*N);
-w=rand(1,size(XtrainT, 2));
-w=w/(sqrt(lambda)*norm(w));
-w
-maxIter = T;
-Y = ys;
 
-for t=1:maxIter
-    inds = randperm(XtrainT);
-    b = mean(Y-XtrainT*w(t,:)');
-    for idx = 1:inds
-        At = XtrainT(idx,:);
-        yt = Y(idx, :);
-        etat = 1/(lambda*t);
-        if (yt < 1)
-            idx1 = (At*w(t,:)'+b);
-            w1 = (1-etat*lambda)*w(t,:) + (etat*yt) % +(etat/k)*sum(At(idx1,:).*repmat(yt(idx1,:),1,size(At,2)),1);
+[d, n]=size(Xtrain);
+w = zeros(d, 1);
+epochs = 40;
+
+for i = 1:epochs
+    inds = randperm(n);
+    for t = 1: T
+        nt = 1/(lambda*t);
+        yt = ys(inds(t));
+        xt = Xtrain(:, inds(t));
+        if (yt * (w' * xt + b) < 1)
+            w = (1 - nt*lambda) * w + nt * yt * xt;
+            b = b + nt * yt;
         else
-            w1 = (1-etat*lambda)*w(t, :);
-            b = 
+            w = (1 - nt*lambda) * w;
         end
     end
-    w(t+1,:) = min(1,1/(sqrt(lambda)*norm(w1)))*w1;
+    a= min(1, 1/(norm(w) * sqrt(lambda)));
+    w = a* w;
+    b = a * b;
 end
 
-wT=mean(w,1);
-w = wT;
-b=mean(Y-XtrainT*wT');
+
+
+
 % Tr=sum(sign(XtrainT*wT'+b)==Y);
 % F=size(XtrainT,1)-Tr;
 

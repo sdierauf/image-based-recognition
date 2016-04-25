@@ -66,7 +66,10 @@ end
 % ? Output:
 % wT +1 , bT +1
 
-[w, b] = TrainSVM(Xtrain, training_labels, 0.0001, 40);
+[w, b] = TrainSVM(Xtrain, training_labels, 0.0001, 9800);
 
-
+yy = w' * Xtrain + b;
+ys = sign(yy);
+wrong = sum(ys' ~= training_labels)
+(9800 - wrong)/9800
 
