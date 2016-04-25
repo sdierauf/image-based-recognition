@@ -1,6 +1,6 @@
 % Stefan Dierauf
 % 25/4/2016
-warning('off','all');
+
 % Exercise 1: The Pegasos Algorithm - training an SVM with SGD
 % Your first task is to use the function vl hog in the software package vl 
 % feat to extract the HOG descriptor of each image patch in the training set.
@@ -45,7 +45,30 @@ end
 
 % ? Input: D = {(x1,y1),...,(xn,yn)}, ?, T
 % ? Initialize: Setw=0andb=0
+w = 0;
+b = 0;
 
+% ? for t = 1,2,...,T
+XtrainT = transpose(Xtrain);
+[N,d]=size(XtrainT);
+lambda = 1; % who knows how big this is
+k = ceil(0.1*N);
+w=rand(1,size(XtrainT, 2));
+w=w/(sqrt(lamda)*norm(w));
+maxIter = 10000;
+
+for t=1:maxIter
+    b=mean(Y-X*w(t,:)');
+    idx=randint(k,1,[1,size(X,1)]);
+    At=X(idx,:);
+    yt=Y(idx,:);
+    idx1=(At*w(t,:)'+b).*yt<1;
+    etat=1/(lamda*t);
+    w1=(1-etat*lamda)*w(t,:)+(etat/k)*sum(At(idx1,:).*repmat(yt(idx1,:),1,size(At,2)),1);
+    w(t+1,:)=min(1,1/(sqrt(lamda)*norm(w1)))*w1;
+end
+
+wT=mean(w,1);
 
 % ? Choose it ? {1, . . . , n} uniformly at random.
 % ? Set ?t = 1 .
@@ -66,7 +89,23 @@ end
 % ? Output:
 % wT +1 , bT +1
 
-[w, b] = TrainSVM(Xtrain, training_labels, 0.0001, 40);
 
+for t=1:maxIter
+%     fprintf('\niteration # %d/%d',t,maxIter);
+    
+        break;
+    end
+end
+if(t<maxIter)
+    fprintf('\nW converged in %d iterations.',t);
+else
+    fprintf('\nW not converged in %d iterations.',maxIter);
+end
+
+% wT=w(end,:);
+
+TrainAccuracy=100*Tr/(Tr+F);
+fprintf('\nPegasos Accuracy on Training set = %.4f %%\n',TrainAccuracy);
+end
 
 
