@@ -8,7 +8,7 @@ b = 0;
 
 [d, n]=size(Xtrain);
 w = zeros(d, 1);
-epochs = 60;
+epochs = 20;
 
 for i = 1:epochs
     inds = randperm(n);

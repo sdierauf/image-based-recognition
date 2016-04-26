@@ -1,6 +1,6 @@
 % Stefan Dierauf
 % 26/4/2016
-% Exercise 2
+% Exercise 4
 % Learn linear separating hyperplane for a ConvNet representation
 
 
@@ -12,7 +12,7 @@ train_labels = inria_train.labels;
 layers = 18;
 best_layer = 1;
 num_wrong = 588;
-for layer = 15:layers
+for layer = 18:layers
     img = train_images{1, 1};
     im_ = single(img);
     im_ = imresize(im_, net.meta.normalization.imageSize(1:2));
