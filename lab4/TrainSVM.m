@@ -8,7 +8,7 @@ b = 0;
 
 [d, n]=size(Xtrain);
 w = zeros(d, 1);
-epochs = 20;
+epochs = 60;
 
 for i = 1:epochs
     inds = randperm(n);
@@ -23,9 +23,13 @@ for i = 1:epochs
             w = (1 - nt*lambda) * w;
         end
     end
+    a= min(1, 1/(norm(w) * sqrt(lambda)));
+    w = a* w;
+    b = a * b;
 end
 
-a= min(1, 1/(norm(w) * sqrt
+
+
 
 % Tr=sum(sign(XtrainT*wT'+b)==Y);
 % F=size(XtrainT,1)-Tr;
