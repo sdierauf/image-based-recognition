@@ -16,6 +16,10 @@ for n = 1:size(x,4)
       % TODO: populate the partial derivatives of f with respect to x by 
       % applying finite difference method (i.e. dx_numerical) . Note. f is 
       % a function that gets an input with similar shape as x
+        xp = x ;
+        xp(i,j,k,n) = xp(i,j,k,n) + delta ;
+        yp = f(xp) ;
+        dx_numerical(i,j,k,n) =  (yp - y) / delta ;
       end
     end
   end
